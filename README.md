@@ -37,8 +37,8 @@
 | ファイル | 対象 |
 | --- | --- |
 | `movlyric-<version>-arm64.dmg` | **macOS（Apple Silicon）** |
-| `movlyric Setup <version>.exe` | **Windows（標準）** — CPU で解析します |
-| `movlyric Web Setup <version>.exe` + `movlyric-<version>-x64.nsis.7z` | **Windows（CUDA 版）** — NVIDIA GPU で解析します |
+| `movlyric.Setup.<version>.exe` | **Windows（標準）** — CPU で解析します |
+| `movlyric.Web.Setup.<version>.exe` | **Windows（CUDA 版）** — NVIDIA GPU で解析します |
 
 ### Windows: 標準版と CUDA 版のどちらを選ぶか
 
@@ -49,17 +49,17 @@ NVIDIA GPU がある場合、CUDA 版は音源分離と歌詞整列を GPU で�
 
 どちらを使っているかは、解析中の画面に出る「解析デバイス」で確認できます。
 
-### CUDA 版のインストール手順（重要）
+### CUDA 版のインストールについて
 
-CUDA 版は**ファイルが 2 つに分かれています。両方を同じフォルダに置いてから**
-`movlyric Web Setup <version>.exe` を実行してください。
+CUDA 版のインストーラ（`movlyric.Web.Setup.<version>.exe`）は 1MB 弱の小さなファイルで、
+**実行するとアプリ本体（約 2.3GB）を自動でダウンロードします**。
 
-1. `movlyric Web Setup <version>.exe` をダウンロード
-2. `movlyric-<version>-x64.nsis.7z` を**同じフォルダに**ダウンロード
-3. `movlyric Web Setup <version>.exe` を実行
+本体の配信元は `https://movlyric-dl.konalab.work`（Cloudflare R2）です。GitHub の
+リリース資産は 1 ファイル 2GiB までという制限があり、CUDA 版の本体はこれを超えるため
+別のホストに置いています。**インストール中はこのドメインへの通信が必要**なので、
+社内ネットワーク等で制限がある場合は許可してください。
 
-`.7z` を自分で展開する必要はありません。インストーラが読み取ります。
-片方だけだとインストールできないので注意してください。
+ダウンロードした本体はインストーラが SHA512 で検証してから展開します。
 
 ## インストール時の警告について
 
@@ -104,10 +104,12 @@ SmartScreen が「WindowsによってPCが保護されました」と表示し�
 ## 配布物の完全性確認（SHA256）
 
 各リリースのリリースノートに、全ファイルの SHA256 を記載しています。
+GitHub はファイル名の空白をドットに置き換えるので、ダウンロードしたファイル名は
+`movlyric.Setup.1.0.0.exe` のようになります。
 
 ```powershell
 # Windows (PowerShell)
-Get-FileHash ".\movlyric Setup 1.0.0.exe" -Algorithm SHA256
+Get-FileHash .\movlyric.Setup.1.0.0.exe -Algorithm SHA256
 ```
 
 ```bash
